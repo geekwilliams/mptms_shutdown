@@ -1,0 +1,19 @@
+{
+  "name": "mptms_shutdown",
+  "version": "1.0.0",
+  "description": "Application to enable serial communication devices to trigger shutdown of Dolby IMS show servers",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geekwilliams/mptms_shutdown.git"
+  },
+  "author": "Caleb Williams",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/geekwilliams/mptms_shutdown/issues"
+  },
+  "homepage": "https://github.com/geekwilliams/mptms_shutdown#readme"
+}
