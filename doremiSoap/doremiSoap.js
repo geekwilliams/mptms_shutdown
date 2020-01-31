@@ -11,10 +11,10 @@ const soapGen = require('./soapGen');
 
 class Soap {
 
-	constructor(url, sessionId, args) {
+	constructor(url, sessionId, user) {
 		this.url = url;
 		this.sessionId = sessionId;
-		this.args = args;
+		this.args = user;
 		this.AssetCheck = '/dc/dcp/json/v1/AssetCheck';
 		this.AssetManagement = '/dc/dcp/json/v1/AssetManagement';
 		this.AudioManagement = '/dc/dcp/json/v1/AudioManagement'; 
@@ -75,8 +75,8 @@ class Soap {
 		});
 
 	}
-
-	login(user) {
+	//---SessionManagement---//
+	Login(user) {
 
 		return new Promise(async (resolve, reject) => {
 			let sGen = new soapGen();
@@ -106,7 +106,68 @@ class Soap {
 		});
 
 	}
+	Logout() {
+		return new Promise((resolve, reject) => {
+			let soap = new soapGen();
+			let request = soap.generateJsonOperation(this.sessionId, 'Logout');
+			let net = new httpRequest(this.url, this.SessionManagement);
+			let response = await net.POST(request);
 
+			if (response == undefined){
+				let err = console.error('No response from server');
+				reject(err);
+			}
+			else {
+				resolve(response);
+			}
+		});
+	}
+	WhoAmI() {
+		return new Promise((resolve, reject) => {
+			let soap = new soapGen();
+			let request = soap.generateJsonOperation(this.sessionId, 'WhoAmI');
+			let net = new httpRequest(this.url, this.SessionManagement);
+			let response = await net.POST(request);
+
+			if (response == undefined){
+				let err = console.error('No response from server');
+				reject(err);
+			}
+			else {
+				resolve(response);
+			}
+		});
+	}
+	Relogin(user) {
+
+		return new Promise(async (resolve, reject) => {
+			let sGen = new soapGen();
+			let request = sGen.generateLoginRequest('Relogin', user);
+			let netReq = new httpRequest(this.url, this.SessionManagement);
+
+			//response should be json
+			let response = await netReq.POST(request);
+			let json = await JSON.parse(response);
+			
+			let sessionId = json.LoginResponse.sessionId;
+
+			//make sure we got something back
+			if (sessionId == undefined) {
+				reject(Console.error('Unable to get session ID from server'));
+			}
+			else {
+
+				//set sessionId variable for object instanse
+				this.sessionId = sessionId;
+				let res = {
+					response: json,
+					login: true
+				}
+				resolve(res);
+			}
+		});
+
+	}
 	//The following methods require a authentication to get valid information from server
 	//---PowerManagement---//
 	Shutdown() {
