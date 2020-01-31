@@ -21,7 +21,7 @@ class soapGen {
 	}
 
 	//Creates Json request for an operation to be completed
-	generateJsonOp(sessionId, operation){
+	generateJsonOperation(sessionId, operation){
 		var JsonRequest = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:v1=\"http://www.doremilabs.com/dc/dcp/json/v1_0\"><soapenv:Header/>\
 			<soapenv:Body>\
 			<v1:" + operation + ">\
@@ -45,7 +45,7 @@ class soapGen {
 			return JsonRequest;
 	}
 
-	//Creates Json request with multiple arguments (will use this case for logging in)
+	//Creates Json request with multiple arguments 
 	generateJsonRequest(sessionId, operation, args){
 		var JsonRequest = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns1=\"http://www.doremilabs.com/dc/dcp/json/v1_0\">\
 			<SOAP-ENV:Body>\
