@@ -242,7 +242,7 @@ class Soap {
 		});
 	}
 	CancelAssetCheck(assetCheckId) {
-		return new Promise((async resolve, reject) => {
+		return new Promise(async( resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'assetCheckId': assetCheckId
@@ -313,7 +313,7 @@ class Soap {
 		});
 	}
 	AssetOperationStatus() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'AssetOperationStatus');
 			let net = new httpRequest(this.url, this.AssetManagement);
@@ -377,7 +377,7 @@ class Soap {
 		});
 	}
 	SetAudioMacro(macroId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'macroId': macroId
@@ -396,7 +396,7 @@ class Soap {
 		});
 	}
  	GetAudioMute() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetAudioMute');
 			let net = new httpRequest(this.url, this.AudioManagement);
@@ -627,7 +627,7 @@ class Soap {
 	}
 	//---BackupManagement---//
 	StartBackupGenerate(repairAuto, path, description) {
-		return new Promise((async resolve, reject) => {
+		return new Promise(async( resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'repairAuto': repairAuto,
@@ -2105,11 +2105,11 @@ class Soap {
 			}
 		});
 	}
-	GetNetworkConfig(interface) {
+	GetNetworkConfig(i) {
 		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
-				'interface': interface
+				'interface': i
 			}
 			let request = soap.generateJsonRequest(this.sessionId, 'GetNetworkConfig', args);
 			let net = new httpRequest(this.url, this.MacroManagement);
@@ -2143,11 +2143,11 @@ class Soap {
 			}
 		});
 	}
-	GetNetworkInfo(interface) {
+	GetNetworkInfo(i) {
 		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
-				'interface': interface
+				'interface': i
 			}
 			let request = soap.generateJsonRequest(this.sessionId, 'GetNetworkInfo', args);
 			let net = new httpRequest(this.url, this.MacroManagement);
