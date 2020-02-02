@@ -59,14 +59,14 @@ class Soap {
 	//simple ping to server and return bool
 	online() {
 
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			tcpping.probe(this.url, 80, (err, available) => {
 
 				if (available == null) {
 					reject(err);
 				}
 				else {
-					resolve(available);
+					resolve(true);
 				}
 
 			});
@@ -109,18 +109,18 @@ class Soap {
 
 	//The following methods require a authentication to get valid information from server
 	//---PowerManagement---//
-	Shutdown() {
+	Shutdown(delayMinutes) {
 		return new Promise(async (resolve, reject) => {
 			//create soap request with selected inputs
 			let soap = new soapGen();
 			let args = {
-				'delayMinutes': 0
+				'delayMinutes': delayMinutes
 			}
 			let request = soap.generateJsonRequest(this.sessionId, 'Shutdown', args);
 
-			console.log(request);
 			//create network request
 			let net = new httpRequest(this.url, this.PowerManagement);
+			
 			//send network request
 			let response = await net.POST(request);
 			//return any response
@@ -136,7 +136,6 @@ class Soap {
 			}
 			let request = soap.generateJsonRequest(this.sessionId, 'Reboot', args);
 
-			console.log(request);
 			//create network request
 			let net = new httpRequest(this.url, this.PowerManagement);
 			//send network request
