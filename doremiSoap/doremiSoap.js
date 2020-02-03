@@ -59,14 +59,14 @@ class Soap {
 	//simple ping to server and return bool
 	online() {
 
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			tcpping.probe(this.url, 80, (err, available) => {
 
 				if (available == null) {
 					reject(err);
 				}
 				else {
-					resolve(available);
+					resolve(true);
 				}
 
 			});
@@ -170,18 +170,18 @@ class Soap {
 	}
 	//The following methods require a authentication to get valid information from server
 	//---PowerManagement---//
-	Shutdown() {
+	Shutdown(delayMinutes) {
 		return new Promise(async (resolve, reject) => {
 			//create soap request with selected inputs
 			let soap = new soapGen();
 			let args = {
-				'delayMinutes': 0
+				'delayMinutes': delayMinutes
 			}
 			let request = soap.generateJsonRequest(this.sessionId, 'Shutdown', args);
 
-			console.log(request);
 			//create network request
 			let net = new httpRequest(this.url, this.PowerManagement);
+			
 			//send network request
 			let response = await net.POST(request);
 			//return any response
@@ -197,7 +197,6 @@ class Soap {
 			}
 			let request = soap.generateJsonRequest(this.sessionId, 'Reboot', args);
 
-			console.log(request);
 			//create network request
 			let net = new httpRequest(this.url, this.PowerManagement);
 			//send network request
@@ -260,7 +259,7 @@ class Soap {
 	}
 	//---AssetCheck---//
 	GetAssetChecklist(assetId, assetCheckId, assetCheckType) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let checks = {
 				'assetId': assetId,
@@ -282,7 +281,7 @@ class Soap {
 		});
 	}
 	RunAssetCheck(assetId, assetCheckTitle, assetCheckType) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'assetId': assetId,
@@ -303,7 +302,7 @@ class Soap {
 		});
 	}
 	CancelAssetCheck(assetCheckId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async( resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'assetCheckId': assetCheckId
@@ -322,7 +321,7 @@ class Soap {
 		});
 	}
 	RestartAssetCheck(assetCheckId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'assetCheckId': assetCheckId
@@ -342,7 +341,7 @@ class Soap {
 	}
 	//---AssetManagement---//
 	GetAssetList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetAssetList');
 			let net = new httpRequest(this.url, this.AssetManagement);
@@ -358,7 +357,7 @@ class Soap {
 		});
 	}
 	StartAssetOperation(operation, arrayList) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonRequest(this.sessionId, operation, arrayList);
 			let net = new httpRequest(this.url, this.AssetManagement);
@@ -374,7 +373,7 @@ class Soap {
 		});
 	}
 	AssetOperationStatus() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'AssetOperationStatus');
 			let net = new httpRequest(this.url, this.AssetManagement);
@@ -388,7 +387,7 @@ class Soap {
 		});
 	}
 	ClearAssetOperation() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'ClearAssetOperation');
 			let net = new httpRequest(this.url, this.AssetManagement);
@@ -406,7 +405,7 @@ class Soap {
 	}
 	//---AudioManagement---//
 	GetAudioMacro() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetAudioMacro');
 			let net = new httpRequest(this.url, this.AudioManagement);
@@ -422,7 +421,7 @@ class Soap {
 		});
 	}
 	GetAudioMacroList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetAudioMacroList');
 			let net = new httpRequest(this.url, this.AudioManagement);
@@ -438,7 +437,7 @@ class Soap {
 		});
 	}
 	SetAudioMacro(macroId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'macroId': macroId
@@ -457,7 +456,7 @@ class Soap {
 		});
 	}
  	GetAudioMute() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetAudioMute');
 			let net = new httpRequest(this.url, this.AudioManagement);
@@ -473,7 +472,7 @@ class Soap {
 		});
 	}
 	SetAudioMute(value) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'value': value
@@ -492,7 +491,7 @@ class Soap {
 		});
 	}
 	GetAudioMicrophone() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetAudioMicrophone');
 			let net = new httpRequest(this.url, this.AudioManagement);
@@ -508,7 +507,7 @@ class Soap {
 		});
 	}
 	SetAudioMicrophone(enabled) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'enabled': enabled
@@ -527,7 +526,7 @@ class Soap {
 		});
 	}
 	GetAudioFader() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetAudioFader');
 			let net = new httpRequest(this.url, this.AudioManagement);
@@ -543,7 +542,7 @@ class Soap {
 		});
 	}
 	SetAudioFader(value) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'value': value
@@ -562,7 +561,7 @@ class Soap {
 		});
 	}
 	GetAudioMonitor() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetAudioMonitor');
 			let net = new httpRequest(this.url, this.AudioManagement);
@@ -578,7 +577,7 @@ class Soap {
 		});
 	}
 	GetAudioEqPresetList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetAudioEqPresetList');
 			let net = new httpRequest(this.url, this.AudioManagement);
@@ -595,7 +594,7 @@ class Soap {
 	}
 	//---BackupScan---//
 	StartBackupScan() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'StartBackupScan');
 			let net = new httpRequest(this.url, this.BackupScan);
@@ -611,7 +610,7 @@ class Soap {
 		});
 	}
 	CancelBackupScan(identifier) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'identifier': identifier
@@ -630,7 +629,7 @@ class Soap {
 		});
 	}
 	GetBackupScanProgress(identifier) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'identifier': identifier
@@ -649,7 +648,7 @@ class Soap {
 		});
 	}
 	GetBackupScanResult(identifier) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'identifier': identifier
@@ -668,7 +667,7 @@ class Soap {
 		});
 	}
 	GetBackupFileInfo(backupFilename) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'backupFilename': backupFilename
@@ -688,7 +687,7 @@ class Soap {
 	}
 	//---BackupManagement---//
 	StartBackupGenerate(repairAuto, path, description) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async( resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'repairAuto': repairAuto,
@@ -709,7 +708,7 @@ class Soap {
 		});
 	}
 	GetBackupGenerateProgress(identifier) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'identifier': identifier
@@ -728,7 +727,7 @@ class Soap {
 		});
 	}
 	DeleteBackup(backupFilename) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'backupFilename': backupFilename
@@ -747,7 +746,7 @@ class Soap {
 		});
 	}
 	StartBackupRestore(backupFilename, categoryList) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'backupFilename': backupFilename,
@@ -767,7 +766,7 @@ class Soap {
 		});
 	}
 	GetBackupRestoreProgress(identifier) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'identifier': identifier
@@ -786,7 +785,7 @@ class Soap {
 		});
 	}
 	GetBackupInformation() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetBackupInformation');
 			let net = new httpRequest(this.url, this.BackupManagement);
@@ -803,7 +802,7 @@ class Soap {
 	}
 	//---ConfigManagement---//
 	GetConfigFileContent(id, channel) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'id': id, 
@@ -823,7 +822,7 @@ class Soap {
 		});
 	}
 	SetConfigFileContent(id, channel, content) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'id': id,
@@ -844,7 +843,7 @@ class Soap {
 		});
 	}
 	DeleteConfigFile(id, channel) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'id': id, 
@@ -865,7 +864,7 @@ class Soap {
 	}
 	//---CPLManagement---//
 	GetCPLList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetCPLList');
 			let net = new httpRequest(this.url, this.CPLManagement);
@@ -881,7 +880,7 @@ class Soap {
 		});
 	}
 	DeleteCPL(cplId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'cplId': cplId
@@ -900,7 +899,7 @@ class Soap {
 		});
 	}
 	GetCPLInfo(cplId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'cplId': cplId
@@ -919,7 +918,7 @@ class Soap {
 		});
 	}
 	GetCPLContent(cplId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'cplId': cplId
@@ -938,7 +937,7 @@ class Soap {
 		});
 	}
 	SetCPLContent(content) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'content': content
@@ -957,7 +956,7 @@ class Soap {
 		});
 	}
 	ValidateCPL(cplId, checkStrength) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'cplId': cplId,
@@ -977,7 +976,7 @@ class Soap {
 		});
 	}
 	GetCPLListInfo() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetCPLListInfo');
 			let net = new httpRequest(this.url, this.CPLManagement);
@@ -993,7 +992,7 @@ class Soap {
 		});
 	}
 	GetCPLSettings(cplId, type) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'cplId': cplId,
@@ -1013,7 +1012,7 @@ class Soap {
 		});
 	}
 	SetCPLSettings(cplId, content) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'cplId': cplId,
@@ -1033,7 +1032,7 @@ class Soap {
 		});
 	}
 	RunIntegCheck(cplId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'cplId': cplId
@@ -1052,7 +1051,7 @@ class Soap {
 		});
 	}
 	AbortIntegChecks(cplId) {
-		return new Promise((resolve, reject) => { 
+		return new Promise(async (resolve, reject) => { 
 			let soap = new soapGen();
 			let args = {
 				'cplId': cplId
@@ -1071,7 +1070,7 @@ class Soap {
 		});
 	}
 	GetCPLDefaultSettings(content) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'content': content
@@ -1091,7 +1090,7 @@ class Soap {
 	}
 	//---DateTimeManagement---//
 	GetTime(clockId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'clockId': clockId
@@ -1110,7 +1109,7 @@ class Soap {
 		});
 	}
 	SetTime(clockId, time) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'clockId': clockId,
@@ -1130,7 +1129,7 @@ class Soap {
 		});
 	}
 	GetTimeZone() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetTimeZone');
 			let net = new httpRequest(this.url, this.DateTimeManagement);
@@ -1146,7 +1145,7 @@ class Soap {
 		});
 	}
 	SetTimeZone(timezone) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'timezone': timezone
@@ -1165,7 +1164,7 @@ class Soap {
 		});
 	}
 	GetNTPStatus() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetNTPStatus');
 			let net = new httpRequest(this.url, this.DateTimeManagement);
@@ -1182,7 +1181,7 @@ class Soap {
 	}
 	//---Diagnostics---//
 	GenerateReport() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GenerateReport');
 			let net = new httpRequest(this.url, this.Diagnostics);
@@ -1198,7 +1197,7 @@ class Soap {
 		});
 	}
 	CreateReportTask() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'CreateReportTask');
 			let net = new httpRequest(this.url, this.Diagnostics);
@@ -1214,7 +1213,7 @@ class Soap {
 		});
 	}
 	DeleteReportTask(reportId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'reportId': reportId
@@ -1233,7 +1232,7 @@ class Soap {
 		});
 	}
 	GetReportTaskList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetReportTaskList');
 			let net = new httpRequest(this.url, this.Diagnostics);
@@ -1250,7 +1249,7 @@ class Soap {
 	}
 	//---DLMManagement---//
 	GetDLMList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetDLMList');
 			let net = new httpRequest(this.url, this.DLMManagement);
@@ -1266,7 +1265,7 @@ class Soap {
 		});
 	}
 	DeleteDLM(dlmId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'dlmId': dlmId
@@ -1285,7 +1284,7 @@ class Soap {
 		});
 	}
 	GetDLMContent(dlmId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'dlmId': dlmId
@@ -1304,7 +1303,7 @@ class Soap {
 		});
 	}
 	SetDLMContent(content) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'content': content
@@ -1324,7 +1323,7 @@ class Soap {
 	}
 	//---ExportManagement---//
 	GetExportLocation(dataType) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'dataType': dataType
@@ -1343,7 +1342,7 @@ class Soap {
 		});
 	}
 	GetExportStatus() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetExportStatus');
 			let net = new httpRequest(this.url, this.ExportManagement);
@@ -1359,7 +1358,7 @@ class Soap {
 		});
 	}
 	ExportData(type, name, exportURI) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'type': type,
@@ -1380,7 +1379,7 @@ class Soap {
 		});
 	}
  	CancelExport(identifier) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'identifier': identifier
@@ -1400,7 +1399,7 @@ class Soap {
 	}
 	//---FeatureManagement---//
 	GetFeatureInfo(feature) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'feature': feature
@@ -1419,7 +1418,7 @@ class Soap {
 		});
 	}
 	RefreshFeatureInfo(feature) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'feature': feature
@@ -1439,7 +1438,7 @@ class Soap {
 	}
 	//---IngestManagement---//
 	CreateIngestTask(taskParameters, taskProperties) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'taskParameters': taskParameters,
@@ -1460,7 +1459,7 @@ class Soap {
 
 	}
 	PauseIngestTask(taskId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'taskId': taskId
@@ -1479,7 +1478,7 @@ class Soap {
 		});
 	}
 	ResumeIngestTask(taskId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'taskId': taskId
@@ -1498,7 +1497,7 @@ class Soap {
 		});
 	}
 	CancelIngestTask(taskId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'taskId': taskId
@@ -1517,7 +1516,7 @@ class Soap {
 		});
 	}
 	DeleteIngestTask(taskId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'taskId': taskId
@@ -1536,7 +1535,7 @@ class Soap {
 		});
 	}
 	UpdateIngestTask(taskParameters, taskProperties) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'taskParameters': taskParameters,
@@ -1557,7 +1556,7 @@ class Soap {
 
 	}
 	GetIngestTaskList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetIngestTaskList');
 			let net = new httpRequest(this.url, this.IngestManagement);
@@ -1573,7 +1572,7 @@ class Soap {
 		});
 	}
 	GetIngestTaskInfo(taskId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'taskId': taskId
@@ -1592,7 +1591,7 @@ class Soap {
 		});
 	}
 	GetIngestTaskStatus(taskId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'taskId': taskId
@@ -1611,7 +1610,7 @@ class Soap {
 		});
 	}
 	GetIngestTaskEventCount(taskId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'taskId': taskId
@@ -1630,7 +1629,7 @@ class Soap {
 		});
 	}
 	GetIngestTaskEventMessage(taskId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'taskId': taskId
@@ -1649,7 +1648,7 @@ class Soap {
 		});
 	}
 	GetIngestTaskListInfo(taskId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'taskId': taskId
@@ -1668,7 +1667,7 @@ class Soap {
 		});
 	}
 	GetIngestTaskEventList(taskId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'taskId': taskId
@@ -1688,7 +1687,7 @@ class Soap {
 	}
 	//---IngestScan---//
 	StartScan(uri, maxDepth, typeList, reportIsComplete, reportIsAlreadyIngested, filterProduct, filterSerial, alternateConfigurationFile) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'maxDepth': maxDepth,
@@ -1713,7 +1712,7 @@ class Soap {
 		});
 	}
 	CancelScan() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'CancelScan');
 			let net = new httpRequest(this.url, this.IngestManagement);
@@ -1729,7 +1728,7 @@ class Soap {
 		});
 	}
 	GetScanStatus() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetScanStatus');
 			let net = new httpRequest(this.url, this.IngestManagement);
@@ -1745,7 +1744,7 @@ class Soap {
 		});
 	}
 	GetScanResult() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetScanResult');
 			let net = new httpRequest(this.url, this.IngestManagement);
@@ -1761,7 +1760,7 @@ class Soap {
 		});
 	}
 	ClearScan() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'ClearScan');
 			let net = new httpRequest(this.url, this.IngestManagement);
@@ -1778,7 +1777,7 @@ class Soap {
 	}
 	//---InputFeedManagement---//
 	GetInputFeedList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetInputFeedList');
 			let net = new httpRequest(this.url, this.IngestManagement);
@@ -1794,7 +1793,7 @@ class Soap {
 		});
 	}
 	ConfigureInputFeed(feedId, config) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'feedId': feedId,
@@ -1814,7 +1813,7 @@ class Soap {
 		});
 	}
 	GetInputFeedProgramList(feedId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'feedId': feedId
@@ -1833,7 +1832,7 @@ class Soap {
 		});
 	}
 	GetInputFeedStatus(feedId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'feedId': feedId
@@ -1853,7 +1852,7 @@ class Soap {
 	}
 	//---KDMManagement---//
 	GetKDMList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetKDMList');
 			let net = new httpRequest(this.url, this.IngestManagement);
@@ -1869,7 +1868,7 @@ class Soap {
 		});
 	}
 	DeleteKDM(kdmId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'kdmId': kdmId
@@ -1888,7 +1887,7 @@ class Soap {
 		});
 	}
 	GetKDMInfo(kdmId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'kdmId': kdmId
@@ -1907,7 +1906,7 @@ class Soap {
 		});
 	}
 	GetKDMContent(kdmId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'kdmId': kdmId
@@ -1926,7 +1925,7 @@ class Soap {
 		});
 	}
 	SetKDMContent(kdmId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'kdmId': kdmId
@@ -1945,7 +1944,7 @@ class Soap {
 		});
 	}
 	GetKDMListInfo() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetKDMListInfo');
 			let net = new httpRequest(this.url, this.IngestManagement);
@@ -1962,7 +1961,7 @@ class Soap {
 	}
 	//---LogManagement---//
 	CreateLogSnapshot(databaseId, filters, title) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'databaseId': databaseId, 
@@ -1983,7 +1982,7 @@ class Soap {
 		});
 	}
 	GetLogSnapshotList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetLogSnapshotList');
 			let net = new httpRequest(this.url, this.IngestManagement);
@@ -1999,7 +1998,7 @@ class Soap {
 		});
 	}
 	DeleteLogSnapshot(snapshotd) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'snapshotId': snapshotd
@@ -2018,7 +2017,7 @@ class Soap {
 		});
 	}
 	QueryLog(databaseId, offset, count, descendingOrder, filters) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'databaseId': databaseId,
@@ -2042,7 +2041,7 @@ class Soap {
 	}
 	//---MacroManagement---//
 	GetMacroList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetMacroList');
 			let net = new httpRequest(this.url, this.MacroManagement);
@@ -2058,7 +2057,7 @@ class Soap {
 		});
 	}
 	GetMacroInfo(uuid) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'uuid': uuid
@@ -2077,7 +2076,7 @@ class Soap {
 		});
 	}
 	RunMacro(name) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'name': name
@@ -2097,7 +2096,7 @@ class Soap {
 	}
 	//---Maintenance---//
 	GetMaintenanceTaskList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetMaintenanceTaskList');
 			let net = new httpRequest(this.url, this.Maintenance);
@@ -2113,7 +2112,7 @@ class Soap {
 		});
 	}
 	GetMaintenanceOperationList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetMaintenanceOperationList');
 			let net = new httpRequest(this.url, this.Maintenance);
@@ -2129,7 +2128,7 @@ class Soap {
 		});
 	}
 	AddMaintenanceOperation(authId, taskId, annotationText) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'authId': authId,
@@ -2151,7 +2150,7 @@ class Soap {
 	}
 	//---NetworkManagement---//
 	GetNetworkList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetNetworkList');
 			let net = new httpRequest(this.url, this.MacroManagement);
@@ -2166,11 +2165,11 @@ class Soap {
 			}
 		});
 	}
-	GetNetworkConfig(interface) {
-		return new Promise((resolve, reject) => {
+	GetNetworkConfig(i) {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
-				'interface': interface
+				'interface': i
 			}
 			let request = soap.generateJsonRequest(this.sessionId, 'GetNetworkConfig', args);
 			let net = new httpRequest(this.url, this.MacroManagement);
@@ -2186,7 +2185,7 @@ class Soap {
 		});
 	}
 	SetNetworkConfig(networkConfig) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'networkConfig': networkConfig
@@ -2204,11 +2203,11 @@ class Soap {
 			}
 		});
 	}
-	GetNetworkInfo(interface) {
-		return new Promise((resolve, reject) => {
+	GetNetworkInfo(i) {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
-				'interface': interface
+				'interface': i
 			}
 			let request = soap.generateJsonRequest(this.sessionId, 'GetNetworkInfo', args);
 			let net = new httpRequest(this.url, this.MacroManagement);
@@ -2225,7 +2224,7 @@ class Soap {
 	}
 	//---NotificationEvents---//
 	GetNotificationStatus(database) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'database': database
@@ -2244,7 +2243,7 @@ class Soap {
 		});
 	}
 	GetNotificationList(database, lowId, highId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'database': database,
@@ -2265,7 +2264,7 @@ class Soap {
 		});
 	}
 	SetEventTag(database, eventId, tag) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'database': database,
@@ -2286,7 +2285,7 @@ class Soap {
 		});
 	}
 	ResetEventTag(database, eventId, tag) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'database': database,
@@ -2308,7 +2307,7 @@ class Soap {
 	}
 	//---Projectors---//
 	GetProjectorMacroList(projector) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'projector': projector
@@ -2329,7 +2328,7 @@ class Soap {
 	}
 	//---ScheduleManagement---//
 	CreateSchedule(scheduleInfo) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'scheduleInfo': scheduleInfo
@@ -2348,7 +2347,7 @@ class Soap {
 		});
 	}
 	GetScheduleList(dateFrom, dateTo) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'dateFrom': dateFrom,
@@ -2368,7 +2367,7 @@ class Soap {
 		});
 	}
 	DeleteSchedule(scheduleId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'scheduleId': scheduleId
@@ -2387,7 +2386,7 @@ class Soap {
 		});
 	}
 	GetScheduleInfo(scheduleId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'scheduleId': scheduleId
@@ -2406,7 +2405,7 @@ class Soap {
 		});
 	}
 	GetSchedulerStatus() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetSchedulerStatus');
 			let net = new httpRequest(this.url, this.ScheduleManagement);
@@ -2422,7 +2421,7 @@ class Soap {
 		});
 	}
 	GetSchedulerStatus() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetSchedulerStatus');
 			let net = new httpRequest(this.url, this.ScheduleManagement);
@@ -2438,7 +2437,7 @@ class Soap {
 		});
 	}
 	StartScheduler() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'StartScheduler');
 			let net = new httpRequest(this.url, this.ScheduleManagement);
@@ -2454,7 +2453,7 @@ class Soap {
 		});
 	}
 	StopScheduler() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'StopScheduler');
 			let net = new httpRequest(this.url, this.ScheduleManagement);
@@ -2471,7 +2470,7 @@ class Soap {
 	}
 	//---Sensors---//
 	GetModuleList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetModuleList');
 			let net = new httpRequest(this.url, this.Sensors);
@@ -2487,7 +2486,7 @@ class Soap {
 		});
 	}
 	GetTemperatureList(module) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'module': module
@@ -2506,7 +2505,7 @@ class Soap {
 		});
 	}
 	GetFanList(module) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'module': module
@@ -2525,7 +2524,7 @@ class Soap {
 		});
 	}
 	GetVoltageList(module) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'module': module
@@ -2545,7 +2544,7 @@ class Soap {
 	}
 	//---ShowControl---//
 	Play() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'Play');
 			let net = new httpRequest(this.url, this.ShowControl);
@@ -2561,7 +2560,7 @@ class Soap {
 		});
 	}
 	Pause() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'Pause');
 			let net = new httpRequest(this.url, this.ShowControl);
@@ -2577,7 +2576,7 @@ class Soap {
 		});
 	}
 	Eject() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'Eject');
 			let net = new httpRequest(this.url, this.ShowControl);
@@ -2593,7 +2592,7 @@ class Soap {
 		});
 	}
 	SkipForward() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'SkipForward');
 			let net = new httpRequest(this.url, this.ShowControl);
@@ -2609,7 +2608,7 @@ class Soap {
 		});
 	}
 	SkipBackward() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'SkipBackward');
 			let net = new httpRequest(this.url, this.ShowControl);
@@ -2625,7 +2624,7 @@ class Soap {
 		});
 	}
 	JumpForward(offset) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'offset': offset
@@ -2644,7 +2643,7 @@ class Soap {
 		});
 	}
 	JumpBackward(offset) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'offset': offset
@@ -2663,7 +2662,7 @@ class Soap {
 		});
 	}
 	JumpTimecode(timecode) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'timecode': timecode
@@ -2682,7 +2681,7 @@ class Soap {
 		});
 	}
 	JumpElement(elementId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'elementId': elementId
@@ -2701,7 +2700,7 @@ class Soap {
 		});
 	}
 	SetLoopMode(loopMode) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'loopMode': loopMode
@@ -2720,7 +2719,7 @@ class Soap {
 		});
 	}
 	GetLoopMode(loopMode) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'loopMode': loopMode
@@ -2739,7 +2738,7 @@ class Soap {
 		});
 	}
 	LoadShowAsset(splId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'splId': splId
@@ -2758,7 +2757,7 @@ class Soap {
 		});
 	}
 	LoadClip(clipId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'clipId': clipId
@@ -2777,7 +2776,7 @@ class Soap {
 		});
 	}
 	LoadShowConent(content) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'content': content
@@ -2796,7 +2795,7 @@ class Soap {
 		});
 	}
 	GetShowStatus() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetShowStatus');
 			let net = new httpRequest(this.url, this.ShowControl);
@@ -2812,7 +2811,7 @@ class Soap {
 		});
 	}
 	GetShowLockStatus() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetShowLockStatus');
 			let net = new httpRequest(this.url, this.ShowControl);
@@ -2828,7 +2827,7 @@ class Soap {
 		});
 	}
 	GetElementListStatus() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetElementListStatus');
 			let net = new httpRequest(this.url, this.ShowControl);
@@ -2844,7 +2843,7 @@ class Soap {
 		});
 	}
 	GetLoadinStatus() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetLoadinStatus');
 			let net = new httpRequest(this.url, this.ShowControl);
@@ -2860,7 +2859,7 @@ class Soap {
 		});
 	}
 	GetErrorStatus() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetErrorStatus');
 			let net = new httpRequest(this.url, this.ShowControl);
@@ -2877,7 +2876,7 @@ class Soap {
 	}
 	//---SNMP---//
 	GetSNMP(oid) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'oid': oid
@@ -2897,7 +2896,7 @@ class Soap {
 	}
 	//---SPLManagement---//
 	GetSPLList() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetSPLList');
 			let net = new httpRequest(this.url, this.SPLManagement);
@@ -2913,7 +2912,7 @@ class Soap {
 		});
 	}
 	DeleteSPL(splId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'splId': splId
@@ -2932,7 +2931,7 @@ class Soap {
 		});
 	}
 	GetSPLInfo(splId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'splId': splId
@@ -2951,7 +2950,7 @@ class Soap {
 		});
 	}
 	GetSPLContent(splId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'splId': splId
@@ -2970,7 +2969,7 @@ class Soap {
 		});
 	}
 	SetSPLContent(splId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'splId': splId
@@ -2989,7 +2988,7 @@ class Soap {
 		});
 	}
 	GetSPLListInfo() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetSPLListInfo');
 			let net = new httpRequest(this.url, this.SPLManagement);
@@ -3005,7 +3004,7 @@ class Soap {
 		});
 	}
 	GetSPLRuntime() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetSPLRuntime');
 			let net = new httpRequest(this.url, this.SPLManagement);
@@ -3022,7 +3021,7 @@ class Soap {
 	}
 	//---StorageManagement---//
 	GetStorageList() {									 
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetStorageList');
 			let net = new httpRequest(this.url, this.StorageManagement);
@@ -3038,7 +3037,7 @@ class Soap {
 		});
 	}
 	GetStorageUnitInfo(name) {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'name': name
@@ -3057,7 +3056,7 @@ class Soap {
 		});
 	}
 	AddActiveUnit(storageUnit, activeUnit) {								 
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'storageUnit': storageUnit,
@@ -3077,7 +3076,7 @@ class Soap {
 		});
 	}
 	RemoveActiveUnit(storageUnit, activeUnit) {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'storageUnit': storageUnit,
@@ -3097,7 +3096,7 @@ class Soap {
 		});
 	}
 	StartStorageInit(storageName, driveCount) {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'storageName': storageName,
@@ -3117,7 +3116,7 @@ class Soap {
 		});
 	}
 	GetStorageInitStatus() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetStorageInitStatus');
 			let net = new httpRequest(this.url, this.StorageManagement);
@@ -3134,7 +3133,7 @@ class Soap {
 	}
 	//---SystemInformation---//
 	GetProductInformation() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetProductInformation');
 			let net = new httpRequest(this.url, this.SystemInformation);
@@ -3150,7 +3149,7 @@ class Soap {
 		});
 	}
 	GetSoftwareInventoryList() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetSoftwareInventoryList');
 			let net = new httpRequest(this.url, this.SystemInformation);
@@ -3166,7 +3165,7 @@ class Soap {
 		});
 	}
 	GetHardwareInventoryList() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetHardwarenventoryList');
 			let net = new httpRequest(this.url, this.SystemInformation);
@@ -3182,7 +3181,7 @@ class Soap {
 		});
 	}
 	GetHostname() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetHostname');
 			let net = new httpRequest(this.url, this.SystemInformation);
@@ -3198,7 +3197,7 @@ class Soap {
 		});
 	}
 	SetHostname(hostname, screenName) {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'hostname': hostname,
@@ -3218,7 +3217,7 @@ class Soap {
 		});
 	}
 	GetCertificateList() {									 
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetCertificateList');
 			let net = new httpRequest(this.url, this.SystemInformation);
@@ -3234,7 +3233,7 @@ class Soap {
 		});
 	}
 	GetFeatureList() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetFeatureList');
 			let net = new httpRequest(this.url, this.SystemInformation);
@@ -3251,7 +3250,7 @@ class Soap {
 	}
 	//---SystemOverview---//
 	GetSystemOverview() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetSystemOverview');
 			let net = new httpRequest(this.url, this.SystemOverview);
@@ -3267,7 +3266,7 @@ class Soap {
 		});
 	}
 	GetSystemStatus() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetSystemStatus');
 			let net = new httpRequest(this.url, this.SystemOverview);
@@ -3284,7 +3283,7 @@ class Soap {
 	}
 	//---TKR---//
 	CreateTkrTask(url, cplId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'url': url, 
@@ -3304,7 +3303,7 @@ class Soap {
 		});
 	}
 	GetTkrTaskList(cplId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'cplId': cplId
@@ -3323,7 +3322,7 @@ class Soap {
 		});
 	}
 	CancelTkrTask(tkrId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'tkrId': tkrId
@@ -3342,7 +3341,7 @@ class Soap {
 		});
 	}
 	GetTkrTaskInfo(tkrId) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'tkrId': tkrId
@@ -3362,7 +3361,7 @@ class Soap {
 	}
 	//---Toolbox---//
 	EncryptConfigPassword(plaintext) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'plaintext': plaintext
@@ -3381,7 +3380,7 @@ class Soap {
 		});
 	}
 	TestURIAccess(uri, write, username, password, passwordEncoding) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'uri': uri,
@@ -3405,7 +3404,7 @@ class Soap {
 	}
 	//---TriggerManagement---//
 	GetTriggerList() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetTriggerList');
 			let net = new httpRequest(this.url, this.TriggerManagement);
@@ -3421,7 +3420,7 @@ class Soap {
 		});
 	}
 	GetTriggerInfo(uuid) {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'uuid': uuid
@@ -3441,7 +3440,7 @@ class Soap {
 	}
 	//---UserManagement---//
 	GetUserList() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetUserList');
 			let net = new httpRequest(this.url, this.UserManagement);
@@ -3457,7 +3456,7 @@ class Soap {
 		});
 	}
 	GetGroupList() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetGroupList');
 			let net = new httpRequest(this.url, this.UserManagement);
@@ -3473,7 +3472,7 @@ class Soap {
 		});
 	}
 	GetUserListInfo() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetUserListInfo');
 			let net = new httpRequest(this.url, this.UserManagement);
@@ -3489,7 +3488,7 @@ class Soap {
 		});
 	}
 	CreateUser(userId, groupId, userType, password, userFullName) {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'userId': userId, 
@@ -3512,7 +3511,7 @@ class Soap {
 		});
 	}
 	DeleteUser(userId, userType) {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'userId': userId, 
@@ -3532,7 +3531,7 @@ class Soap {
 		});
 	}
 	ModifyUser(userId, userType, groupId, userFullName) {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'userId': userId, 
@@ -3554,7 +3553,7 @@ class Soap {
 		});
 	}
 	GetUserInfo(userId, userType) {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'userId': userId, 
@@ -3574,7 +3573,7 @@ class Soap {
 		});
 	}
 	ChangeUserPassword(userId, password, userType) {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'userId': userId,
@@ -3596,7 +3595,7 @@ class Soap {
 	}
 	//---VirtualAssetManagement---//
 	CreateVirtualClip(parameters) {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let args = {
 				'parameters': parameters
@@ -3616,7 +3615,7 @@ class Soap {
 
 	}
 	GetVirtualClipList() {									
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetVirtualClipList');
 			let net = new httpRequest(this.url, this.VirtualAssetManagement);
@@ -3633,7 +3632,7 @@ class Soap {
 	}
 	//---WebUi---//
 	GetFooter() {
-		return new Promise((resovle, reject) => {
+		return new Promise(async (resovle, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetFooter');
 			let net = new httpRequest(this.url, this.WebUI);
@@ -3649,7 +3648,7 @@ class Soap {
 		});
 	}
 	GetConnectionCount() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonRequestNoSession('GetConnectionCount');
 			let net = new httpRequest(this.url, this.WebUI);
@@ -3666,7 +3665,7 @@ class Soap {
 		});
 	}
 	GetCounters() {
-		return new Promise((resovle, reject) => {
+		return new Promise(async (resovle, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'GetCounters');
 			let net = new httpRequest(this.url, this.WebUI);

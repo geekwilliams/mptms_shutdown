@@ -19,7 +19,7 @@ let user = {
 }
 
 //additional setup information:
-let location = StrLibrary.mesa;
+let location = StrLibrary.fox;
 let listenPort = 5006; 
 
 
@@ -90,7 +90,7 @@ async function shutdownManager(serverUrl, projectorUrl, house) {
 
             if (status.login == true) {
                 console.log('Requesting shutdown of server at ' + serverUrl);
-                let imsResponse = await SoapSvr.shutdown();
+                let imsResponse = await SoapSvr.Shutdown(1);
                 //console.log(imsResponse):
                 console.log('Waiting for server to shut down...');
                 

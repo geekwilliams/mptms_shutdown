@@ -1,0 +1,5 @@
+1) git clone https://github.com/geekwilliams/mptms_shutdown.git
+2) edit app.js location variable (StrLibrary.*location*)
+3) create ecosystem.js
+4) register with pm2
+5) start service
