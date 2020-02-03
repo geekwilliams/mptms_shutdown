@@ -107,7 +107,7 @@ class Soap {
 
 	}
 	Logout() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'Logout');
 			let net = new httpRequest(this.url, this.SessionManagement);
@@ -123,7 +123,7 @@ class Soap {
 		});
 	}
 	WhoAmI() {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			let soap = new soapGen();
 			let request = soap.generateJsonOperation(this.sessionId, 'WhoAmI');
 			let net = new httpRequest(this.url, this.SessionManagement);
