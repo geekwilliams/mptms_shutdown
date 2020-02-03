@@ -44,7 +44,7 @@ class Projector {
 					reject(err);
 				}
 				else {
-					resolve(available);
+					resolve(true);
 				}
 
 			});
