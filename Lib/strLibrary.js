@@ -3,6 +3,7 @@
 var StrLibrary = {
     studio: 'studio',
     mesa: 'mesa',
+    laramie: 'laramie',
     america: 'america',
     rialto: 'rialto',
     fox: 'fox',

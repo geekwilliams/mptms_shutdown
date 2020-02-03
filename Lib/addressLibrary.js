@@ -6,6 +6,7 @@ var AddressLibrary = {
     mediaSub: '10.95.x.x',
     studio: 128,
     mesa: 130,
+    laramie: 132,
     america: 134,
     rialto: 136,
     fox: 138,
@@ -51,6 +52,9 @@ function NetAddress(theater, auditorium, device) {
             case 'startwin':
                 currentAddress = currentAddress.replace('x', (AddressLibrary.starTwin + 1).toString());
                 break;
+            case 'laramie':
+                currentAddress = currentAddress.replace('x', (AddressLibrary.laramie + 1).toString());
+                break;
             default:
                 return console.log('Incorrect theater.');
         }
@@ -81,6 +85,9 @@ function NetAddress(theater, auditorium, device) {
                 break;
             case 'startwin':
                 currentAddress = currentAddress.replace('x', (AddressLibrary.starTwin).toString());
+                break;
+            case 'laramie':
+                currentAddress = currentAddress.replace('x', (AddressLibrary.laramie).toString());
                 break;
             default:
                 return console.log('Incorrect theater.');
