@@ -86,7 +86,7 @@ async function shutdownManager(serverUrl, projectorUrl, house) {
 
         else {
             //log in to server
-            let status = await SoapSvr.login(user);
+            let status = await SoapSvr.Login(user);
 
             if (status.login == true) {
                 console.log('Requesting shutdown of server at ' + serverUrl);
