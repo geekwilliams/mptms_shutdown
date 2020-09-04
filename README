@@ -3,3 +3,9 @@
 3) create ecosystem.js
 4) register with pm2
 5) start service
+
+
+**TODO
+
+ - update README
+ - full unit test
