@@ -1,3 +1,6 @@
+// This file is used to emulate a projector for testing
+
+
 let net = require('net');
 
 let pStandby = '(PWR3)';         // Projector Standby code

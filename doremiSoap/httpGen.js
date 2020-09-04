@@ -9,8 +9,7 @@ const http = require('http');
 class httpReq {
 	constructor(hostname, path) {
 		this.hostname = hostname;
-		this.path = path;
-		
+		this.path = path;		
 	}
 
 
@@ -23,7 +22,7 @@ class httpReq {
 			path: this.path,
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json',
+				'Content-Type': 'application/xml',
 				'Content-Length': Buffer.byteLength(request)
 				}
 			}
@@ -34,7 +33,7 @@ class httpReq {
 			let req = new http.request(options);
 
 			//add listeners 
-			req.on('response', async (res) => {
+			req.on('response', (res) => {
 
 				//handle data stream
 				res.on('data', (chunk) => {
@@ -43,7 +42,7 @@ class httpReq {
 				});
 
 				//assign finished buffer to response and resolve
-				await res.on('end', () => {
+				res.on('end', () => {
 					let response = buffer;
 					//string starts with 'undefined'...cutting this off
 					let json = response.substring(9);
@@ -53,7 +52,7 @@ class httpReq {
 
 				//error
 				res.on('error', (err) => {
-					console.error(err);
+					reject(err);
 				});
 			}); 
 			

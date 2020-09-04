@@ -1,5 +1,25 @@
+/*  This application handles the graceful and automatic shutdown of houses using Christie and Doremi products
+
+    Minimum requirements:
+        -Theater must be a member of Movie Palace Inc. and use it's internal IP Scheme
+            **If outside of Movie Palace Inc, you may customize 'addressLibrary.js' to
+              match network schema of your location
+        -Theater server running Node.js version 9 or later
+        -Projector must be series 2 and running latest release of software(v-4.8.1(3)) 
+        -IMS2000 must be running software version 2.8 or later
+        -IMS3000 must be running software version 3.0 or later
+
+        This application has been tested with the equipment above. Use with any other configuration may have 
+        unexpected results.
+
+    Start app standalone or as child process with arguments:
+        $1 = location (str, see strLibrary.js for correct format)
+        $2 = port to listen on (str), defaults to 5006
+ 
+*/
+
+
 //library for network addresses of devices
-const StrLibrary = require('./Lib/strLibrary');
 const NetAddress = require('./Lib/addressLibrary');
 
 //net required for network activities
@@ -10,18 +30,17 @@ const Projector = require('./Solaria_API/Projector');
 const api = require('./Solaria_API/Solaria');
 
 //required to communicate with doremi server
-const DrmSoap = require('./doremiSoap/doremiSoap');
+const drmSoap = require('./doremiSoap/doremiSoapv2.js');
+const drmOperation = require('./doremiSoap/soapOperations');
+const { PowerManagement } = require('./doremiSoap/soapOperations');
 
-//doremi user info
+//*** additional setup information ***//
+let location = process.argv[2];
+let listenPort = process.argv[3] || 5006; 
 let user = {
-    username: 'manager',
+    username: 'manager', 
     password: 'password'
 }
-
-//additional setup information:
-let location = StrLibrary.fox;
-let listenPort = 5006; 
-
 
 function sock(port) {
     //creates socket listening for shutdown command
@@ -65,12 +84,11 @@ function commHandler(args) {
  
 async function shutdownManager(serverUrl, projectorUrl, house) {
 
-    let SoapSvr = new DrmSoap(serverUrl);
+    let SoapSvr = new drmSoap(serverUrl, user);
     let SvrOnline = await SoapSvr.online(); 
 
     let projector = new Projector(projectorUrl, '1');
     let projectorOnline = await projector.online();
-    //console.log(projectorOnline);
 
     if (!projectorOnline) {
         console.log('Projector and server in theater ' + house + ' are down.');
@@ -85,31 +103,24 @@ async function shutdownManager(serverUrl, projectorUrl, house) {
         }
 
         else {
-            //log in to server
-            let status = await SoapSvr.Login(user);
-
-            if (status.login == true) {
-                console.log('Requesting shutdown of server at ' + serverUrl);
-                let imsResponse = await SoapSvr.Shutdown(1);
-                //console.log(imsResponse):
+            console.log('Requesting shutdown of server at ' + serverUrl);
+            let shutdownArg = {
+                delayMinutes: '1'
+            };
+            SoapSvr.powerManagementRequest(PowerManagement.Shutdown, shutdownArg)
+                .then(() => {
                 console.log('Waiting for server to shut down...');
-                
-                //wait 3 minutes then send standby to projector
                 setTimeout(function () {
-                    projector.standby();
+                    projector.standbye();
                     console.log('Projector at ' + projectorUrl + ' sent standby command.');
                 }, 180000);
-            }
-            else {
-                console.log('There was a problem with server validation');
-            }
-
+            })
+                .catch(() => {
+                    console.log('Communication has broken down. Please ensure equipment is powered down correctly.');
+                });          
         }
     }
-    
+}
 
-};
-
+// main();
 sock(listenPort);
-
-

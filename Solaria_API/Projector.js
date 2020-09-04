@@ -38,20 +38,17 @@ class Projector {
 	online() {
 		return new Promise((resolve, reject) => {
 
-			ping.probe(this.address, this.port, (err, available) => {
-
-				if (available == null) {
-					reject(err);
-				}
-				else {
+			let socket = new net.Socket();
+			socket.connect(this.port, this.address, function() {
+				socket.write(_.Solaria.power.state);
+				socket.on('data', (data) => {
 					resolve(true);
-				}
-
+				});
+				socket.on('error', (err) =>{
+					reject(false);
+				});
 			});
-
-
 		});
-
 	}
 	
 
